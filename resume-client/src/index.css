@@ -6,6 +6,8 @@
     margin: 0;
     padding: 0;
 }
+
+  
 form {
     padding: 10px;
     width: 80%;
@@ -44,6 +46,7 @@ button {
 .app > p {
     margin-bottom: 30px;
 }
+
 .nestedContainer {
     display: flex;
     align-items: center;
@@ -108,4 +111,4 @@ button {
 .resumeBodyContent {
     text-align: justify;
     margin-bottom: 30px;
-}
+} 
