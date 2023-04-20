@@ -1,13 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
+import axios from "axios";
 
-const Home = () => {
+const Home = ({setResult}) => {
   const [fullName, setFullName] = useState("");
-
   const [phoneNo, setPhoneNo] = useState("");
   const [email, setEmail] = useState("");
   const [linkedin, setLinkedin] = useState("");
-  const [Github, setGithub] = useState("");
+  // const [Github, setGithub] = useState("");
+
+  const navigate = useNavigate()
 
   const [currentPosition, setCurrentPosition] = useState("");
   const [currentLength, setCurrentLength] = useState(1);
@@ -15,6 +18,7 @@ const Home = () => {
   const [headshot, setHeadshot] = useState(null);
   const [loading, setLoading] = useState(false);
   const [companyInfo, setCompanyInfo] = useState([{ name: "", position: "" }]);
+  const [projectInfo,setProjectInfo] =useState([{projectTitle:"",projectDesc:""}])
   //👇🏻 updates the state with user's input
   const handleAddCompany = () =>
     setCompanyInfo([...companyInfo, { name: "", position: "" }]);
@@ -32,18 +36,52 @@ const Home = () => {
     list[index][name] = value;
     setCompanyInfo(list);
   };
+
+  const handleAddProject=()=>{
+    setProjectInfo([...projectInfo,{projectTitle:"",projectDesc:""}])
+  }
+
+  const handleRemoveProject=(index)=>{
+    const list = [...projectInfo];
+    list.splice(index,1);
+    setProjectInfo(list)
+  }
+  const handleUpdateProject =(e,index)=>{
+    const {name,value} = e.target
+    const list = [...projectInfo];
+    list[index][name] = value
+    setProjectInfo(list)
+  }
+
+
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log({
-      fullName,
-      currentPosition,
-      currentLength,
-      currentTechnologies,
-      headshot,
-    });
+
+    const formData = new FormData();
+    formData.append("headshotImage", headshot, headshot.name);
+    formData.append("fullName", fullName);
+    formData.append("phoneNo", phoneNo);
+    formData.append("linkedin", linkedin);
+    formData.append("email",email);
+    formData.append("currentPosition", currentPosition);
+    formData.append("currentLength", currentLength);
+    formData.append("currentTechnologies", currentTechnologies);
+    formData.append("workHistory", JSON.stringify(companyInfo));
+  
+    axios
+        .post("http://localhost:4000/resume/create", formData, {})
+        .then((res) => {
+            if (res.data.message) {
+                console.log(res.data.data);
+                setResult(res.data.data);
+                navigate("/resume");
+            }
+        })
+        .catch((err) => console.error(err));
     setLoading(true);
   };
-  //👇🏻 Renders the Loading component you submit the form
+
   if (loading) {
     return <Loading />;
   }
@@ -216,7 +254,45 @@ const Home = () => {
             </div>
           </div>
         ))}
+        <h3>Projects:</h3>
+        {projectInfo.map((project, index) => (
+          <div className="nestedContainer" key={index}>
+            <div className="companies">
+              <label htmlFor="projectTitle">Project Title:</label>
+              <input
+                type="text"
+                name="projectTitle"
+                required
+                onChange={(e) => handleUpdateProject(e, index)}
+              />
+            </div>
+            <div className="companies">
+              <label htmlFor="projectDesc">Tech used & Short desc:</label>
+              <input
+                type="text"
+                name="projectDesc"
+                required
+                onChange={(e) => handleUpdateProject(e, index)}
+              />
+            </div>
 
+            <div className="btn__group">
+              {projectInfo.length - 1 === index && projectInfo.length < 3 && (
+                <button id="addBtn" onClick={handleAddProject}>
+                  Add
+                </button>
+              )}
+              {projectInfo.length > 1 && (
+                <button
+                  id="deleteBtn"
+                  onClick={() => handleRemoveProject(index)}
+                >
+                  Del
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
         <button>CREATE RESUME</button>
       </form>
     </div>
