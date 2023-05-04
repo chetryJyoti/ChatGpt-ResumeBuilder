@@ -3,7 +3,7 @@ import ErrorPage from "./ErrorPage.js";
 import Loading from "./Loading.js";
 
 const Resume = ({ result }) => {
-    result = null;
+    // result = null;
     if (result === null) {
         return < Loading/>; // Render the loading screen component
       } else if (JSON.stringify(result) === "{}") {

@@ -1,3 +1,4 @@
+require('dotenv').config()
 const { Configuration, OpenAIApi } = require("openai");
 const express = require("express");
 const multer = require("multer");
@@ -29,7 +30,7 @@ const upload = multer({
 });
 
 const configuration = new Configuration({
-	apiKey: "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",
+	apiKey:process.env.REACT_APP_API_KEY,
 });
 
 const openai = new OpenAIApi(configuration);
@@ -56,9 +57,9 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
         currentLength,
         currentTechnologies,
         workHistory,
-        phoneNo,
-        linkedin,
-        email
+        // phoneNo,
+        // linkedin,
+        // email
     } = req.body;
 
 	const workArray = JSON.parse(workHistory);

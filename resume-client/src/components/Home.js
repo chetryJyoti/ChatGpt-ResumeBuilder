@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
 import axios from "axios";
 
-const Home = ({setResult}) => {
+const Home = ({ setResult }) => {
   const [fullName, setFullName] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [email, setEmail] = useState("");
   const [linkedin, setLinkedin] = useState("");
   // const [Github, setGithub] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [currentPosition, setCurrentPosition] = useState("");
   const [currentLength, setCurrentLength] = useState(1);
@@ -18,7 +18,9 @@ const Home = ({setResult}) => {
   const [headshot, setHeadshot] = useState(null);
   const [loading, setLoading] = useState(false);
   const [companyInfo, setCompanyInfo] = useState([{ name: "", position: "" }]);
-  const [projectInfo,setProjectInfo] =useState([{projectTitle:"",projectDesc:""}])
+  const [projectInfo, setProjectInfo] = useState([
+    { projectTitle: "", projectDesc: "" },
+  ]);
   //👇🏻 updates the state with user's input
   const handleAddCompany = () =>
     setCompanyInfo([...companyInfo, { name: "", position: "" }]);
@@ -37,49 +39,54 @@ const Home = ({setResult}) => {
     setCompanyInfo(list);
   };
 
-  const handleAddProject=()=>{
-    setProjectInfo([...projectInfo,{projectTitle:"",projectDesc:""}])
-  }
+  const handleAddProject = () => {
+    setProjectInfo([...projectInfo, { projectTitle: "", projectDesc: "" }]);
+  };
 
-  const handleRemoveProject=(index)=>{
+  const handleRemoveProject = (index) => {
     const list = [...projectInfo];
-    list.splice(index,1);
-    setProjectInfo(list)
-  }
-  const handleUpdateProject =(e,index)=>{
-    const {name,value} = e.target
+    list.splice(index, 1);
+    setProjectInfo(list);
+  };
+  const handleUpdateProject = (e, index) => {
+    const { name, value } = e.target;
     const list = [...projectInfo];
-    list[index][name] = value
-    setProjectInfo(list)
-  }
+    list[index][name] = value;
+    setProjectInfo(list);
+  };
 
-
+  const gptCall = (formData) => {
+    axios
+      .post("http://localhost:4000/resume/create", formData, {})
+      .then((res) => {
+        if (res.data.message) {
+          console.log(res.data.data);
+          setResult(res.data.data);
+          navigate("/resume");
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append("headshotImage", headshot, headshot.name);
     formData.append("fullName", fullName);
     formData.append("phoneNo", phoneNo);
     formData.append("linkedin", linkedin);
-    formData.append("email",email);
+    formData.append("email", email);
     formData.append("currentPosition", currentPosition);
     formData.append("currentLength", currentLength);
     formData.append("currentTechnologies", currentTechnologies);
     formData.append("workHistory", JSON.stringify(companyInfo));
-  
-    axios
-        .post("http://localhost:4000/resume/create", formData, {})
-        .then((res) => {
-            if (res.data.message) {
-                console.log(res.data.data);
-                setResult(res.data.data);
-                navigate("/resume");
-            }
-        })
-        .catch((err) => console.error(err));
     setLoading(true);
+    //calling chatGpt to create resume
+    gptCall(formData);
   };
 
   if (loading) {

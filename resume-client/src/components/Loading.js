@@ -1,9 +1,10 @@
-import React from 'react'
-import {SyncLoader} from "react-spinners";
+import React from "react";
+import { SyncLoader } from "react-spinners";
 const Loading = () => {
   return (
-    <div className='app'>Loading please wait...
-    <SyncLoader
+    <div className="app">
+      Creating Your Resume please wait...
+      <SyncLoader
         color={"#5d3891"}
         size={40}
         aria-label="Loading Spinner"
@@ -11,8 +12,7 @@ const Loading = () => {
         margin={8}
       />
     </div>
-    
-  )
-}
+  );
+};
 
-export default Loading
+export default Loading;
