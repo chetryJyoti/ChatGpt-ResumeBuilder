@@ -66,16 +66,16 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
 	const newEntry = {
 		id: generateID(),
 		fullName,
-		image_url: `http://localhost:4000/uploads/${req.file.filename}`,
+		image_url: `https://resumebuildergpt.onrender.com/uploads/${req.file.filename}`,
 		currentPosition,
 		currentLength,
 		currentTechnologies,
 		workHistory: workArray,
 	};
 
-	const prompt1 = `I am writing a resume, my details are \n name: ${fullName} \n role: ${currentPosition} (${currentLength} years). \n I write in the technolegies: ${currentTechnologies}. Can you write a 100 words description for the top of the resume(first person writing)?`;
+	const prompt1 = `I am writing a resume, my details are \n name: ${fullName} \n role: ${currentPosition} (${currentLength} years). \n I write in the technolegies: ${currentTechnologies}. Can you write a 25 words description for the top of the resume(first person writing)?`;
 
-	const prompt2 = `I am writing a resume, my details are \n name: ${fullName} \n role: ${currentPosition} (${currentLength} years). \n I write in the technolegies: ${currentTechnologies}. Can you write 10 points for a resume on what I am good at?`;
+	const prompt2 = `I am writing a resume, my details are \n name: ${fullName} \n role: ${currentPosition} (${currentLength} years). \n I write in the technolegies: ${currentTechnologies}. Can you write 5 points for a resume on what I am good at?`;
 
 	const remainderText = () => {
 		let stringText = "";

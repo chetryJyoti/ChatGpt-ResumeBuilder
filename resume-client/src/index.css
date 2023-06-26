@@ -59,17 +59,18 @@ button {
     width: 39%;
 }
 .currentInput {
-    width: 95%;
+    width: 100%;
 }
 #photo {
     width: 50%;
 }
 #addBtn {
     background-color: green;
-    margin-right: 5px;
+    padding: 10px 20px;
 }
 #deleteBtn {
     background-color: red;
+    padding: 10px 20px;
 }
 .container {
     min-height: 100vh;
