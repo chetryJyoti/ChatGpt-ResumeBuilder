@@ -57,7 +57,7 @@ const Home = ({ setResult }) => {
 
   const gptCall = (formData) => {
     axios
-      .post("http://localhost:4000/resume/create", formData, {})
+      .post("https://resumeBuilderGpt-api.onrender.com/resume/create", formData, {})
       .then((res) => {
         if (res.data.message) {
           console.log(res.data.data);
