@@ -66,7 +66,7 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
 	const newEntry = {
 		id: generateID(),
 		fullName,
-		image_url: `https://resumebuildergpt.onrender.com/uploads/${req.file.filename}`,
+		image_url: `https://resumebuildergpt-api.onrender.com/uploads/${req.file.filename}`,
 		currentPosition,
 		currentLength,
 		currentTechnologies,
